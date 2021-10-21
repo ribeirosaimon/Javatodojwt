@@ -10,8 +10,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final RolesRepository rolesRepository;
 
@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
     }
+
 
     @Override
     public AppUser saveUser(AppUser user) {
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
         AppUser user = userRepository.findByUsername(username);
         Roles role = rolesRepository.findByName(roleName);
         user.getRoles().add(role);
-
+        userRepository.save(user);
     }
 
     @Override

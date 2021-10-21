@@ -16,6 +16,10 @@ public class AppUser {
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Roles> roles = new ArrayList<>();
 
+    public AppUser(){
+
+    }
+
     public AppUser(String name, String username, String password, Collection<Roles> roles) {
         this.name = name;
         this.username = username;

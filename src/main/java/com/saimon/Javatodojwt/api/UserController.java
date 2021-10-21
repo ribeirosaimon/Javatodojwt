@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,7 +48,31 @@ public class UserController {
         userService.addRoleToUser(form.getUsername(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
-    https://www.youtube.com/watch?v=VVn9OG9nfH0&t=5624s
 
+    @GetMapping("/teste")
+    public String testeapi(){
+        userService.saveRoles(new Roles("ROLE_USER"));
+        userService.saveRoles(new Roles("ROLE_MANAGER"));
+        userService.saveRoles(new Roles("ROLE_ADMIN"));
+        userService.saveRoles(new Roles("ROLE_SUPER_ADMIN"));
+        userService.saveUser(new AppUser(
+                        "nameadmin",
+                        "admin",
+                        "admin",
+                        new ArrayList<>()
+                )
+        );
+        userService.saveUser(new AppUser(
+                        "1nameadmin",
+                        "admin1",
+                        "admin1",
+                        new ArrayList<>()
+                )
+        );
+        userService.addRoleToUser("admin", "ROLE_USER");
+        userService.addRoleToUser("admin1", "ROLE_SUPER_ADMIN");
+        return "ok";
+    }
+//    https://www.youtube.com/watch?v=VVn9OG9nfH0&t=5624s
 
 }
