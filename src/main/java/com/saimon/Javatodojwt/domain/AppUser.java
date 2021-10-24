@@ -1,5 +1,7 @@
 package com.saimon.Javatodojwt.domain;
 
+import com.saimon.Javatodojwt.model.WorkToDo;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
