@@ -1,5 +1,6 @@
 package com.saimon.Javatodojwt.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.saimon.Javatodojwt.model.WorkToDo;
 
 import javax.persistence.*;
@@ -17,16 +18,20 @@ public class AppUser {
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Roles> roles = new ArrayList<>();
+    @JsonIgnoreProperties("appUser")
+    @OneToMany(cascade=CascadeType.ALL)
+    private Collection<WorkToDo> works;
 
     public AppUser(){
 
     }
 
-    public AppUser(String name, String username, String password, Collection<Roles> roles) {
+    public AppUser(String name, String username, String password, Collection<Roles> roles, ArrayList<WorkToDo> works) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.works = works;
     }
 
     public Long getId() {
@@ -69,16 +74,24 @@ public class AppUser {
         this.roles = roles;
     }
 
+    public Collection<WorkToDo> getWorks() {
+        return works;
+    }
+
+    public void setWorks(ArrayList<WorkToDo> works) {
+        this.works = works;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AppUser)) return false;
         AppUser appUser = (AppUser) o;
-        return Objects.equals(getId(), appUser.getId()) && Objects.equals(getName(), appUser.getName()) && Objects.equals(getUsername(), appUser.getUsername()) && Objects.equals(getPassword(), appUser.getPassword()) && Objects.equals(getRoles(), appUser.getRoles());
+        return Objects.equals(getId(), appUser.getId()) && Objects.equals(getName(), appUser.getName()) && Objects.equals(getUsername(), appUser.getUsername()) && Objects.equals(getPassword(), appUser.getPassword()) && Objects.equals(getRoles(), appUser.getRoles()) && Objects.equals(getWorks(), appUser.getWorks());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getUsername(), getPassword(), getRoles());
+        return Objects.hash(getId(), getName(), getUsername(), getPassword(), getRoles(), getWorks());
     }
 }

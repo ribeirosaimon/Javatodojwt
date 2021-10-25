@@ -9,6 +9,7 @@ import com.saimon.Javatodojwt.Form.RoleToUserForm;
 import com.saimon.Javatodojwt.domain.AppUser;
 import com.saimon.Javatodojwt.domain.Roles;
 import com.saimon.Javatodojwt.filter.CustomAuthenticationFilter;
+import com.saimon.Javatodojwt.model.WorkToDo;
 import com.saimon.Javatodojwt.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,6 +115,7 @@ public class UserController {
                         "nameadmin",
                         "admin",
                         "admin",
+                        new ArrayList<>(),
                         new ArrayList<>()
                 )
         );
@@ -121,11 +123,17 @@ public class UserController {
                         "1nameadmin",
                         "admin1",
                         "admin1",
+                        new ArrayList<>(),
                         new ArrayList<>()
                 )
         );
+
         userService.addRoleToUser("admin", "ROLE_USER");
         userService.addRoleToUser("admin1", "ROLE_SUPER_ADMIN");
+
+        WorkToDo work = new WorkToDo(new Date(), "Fort",false,userService.getUser("admin"));
+
+        userService.addWorkToUser("admin", work);
         return "ok";
     }
 //    https://www.youtube.com/watch?v=VVn9OG9nfH0&t=5624s

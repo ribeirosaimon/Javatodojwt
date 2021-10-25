@@ -1,9 +1,10 @@
 package com.saimon.Javatodojwt.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.saimon.Javatodojwt.domain.AppUser;
+import org.hibernate.jdbc.Work;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -19,13 +20,19 @@ public class WorkToDo implements Serializable {
     private String homeWork;
     private boolean checked;
 
+    @ManyToOne
+    @JoinColumn(name = "app_user_id")
+    private AppUser appUser;
+
     public WorkToDo(){
 
     }
-    public WorkToDo(Date datetime, String homeWork, boolean checked) {
+
+    public WorkToDo(Date datetime, String homeWork, boolean checked, AppUser appUser) {
         this.datetime = datetime;
         this.homeWork = homeWork;
         this.checked = checked;
+        this.appUser = appUser;
     }
 
     public Long getId() {
@@ -60,16 +67,24 @@ public class WorkToDo implements Serializable {
         this.checked = checked;
     }
 
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof WorkToDo)) return false;
         WorkToDo workToDo = (WorkToDo) o;
-        return isChecked() == workToDo.isChecked() && Objects.equals(getId(), workToDo.getId()) && Objects.equals(getDatetime(), workToDo.getDatetime()) && Objects.equals(getHomeWork(), workToDo.getHomeWork());
+        return isChecked() == workToDo.isChecked() && Objects.equals(getId(), workToDo.getId()) && Objects.equals(getDatetime(), workToDo.getDatetime()) && Objects.equals(getHomeWork(), workToDo.getHomeWork()) && Objects.equals(getAppUser(), workToDo.getAppUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getDatetime(), getHomeWork(), isChecked());
+        return Objects.hash(getId(), getDatetime(), getHomeWork(), isChecked(), getAppUser());
     }
 }
