@@ -1,6 +1,9 @@
 package com.saimon.Javatodojwt.DTO;
 
+import com.saimon.Javatodojwt.filter.CustomAuthenticationFilter;
 import com.saimon.Javatodojwt.model.WorkToDo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,7 +12,6 @@ import java.util.Optional;
 
 @Service
 public class DTOConverter {
-
     public Optional<WorkDTO> converterDTO(WorkToDo work) throws Exception {
         try {
             WorkDTO workDTO = new WorkDTO(work.getDatetime(), work.getHomeWork(), work.isChecked());

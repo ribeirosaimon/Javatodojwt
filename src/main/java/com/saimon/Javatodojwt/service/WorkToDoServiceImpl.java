@@ -4,6 +4,7 @@ import com.saimon.Javatodojwt.domain.AppUser;
 import com.saimon.Javatodojwt.model.WorkToDo;
 import com.saimon.Javatodojwt.repository.UserRepository;
 import com.saimon.Javatodojwt.repository.WorkToDoRepository;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class WorkToDoServiceImpl implements WorkToDoService {
     private final UserRepository userRepository;
     private final WorkToDoRepository workToDoRepository;
@@ -24,13 +26,11 @@ public class WorkToDoServiceImpl implements WorkToDoService {
     }
 
     @Override
-    public Optional<WorkToDo> saveWork(HttpServletRequest request,
-                                       HttpServletResponse response,
-                                       String work) throws Exception {
-        var user = userService.userLogin(request, response);
+    public Optional<WorkToDo> saveWork(Optional<AppUser> user, WorkToDo work) throws Exception {
         if (work != null) {
-            WorkToDo newWork = new WorkToDo(new Date(), work, false, user.get());
-            workToDoRepository.save(newWork);
+            WorkToDo newWork = new WorkToDo(new Date(), work.getHomeWork(), false, user.get());
+            user.get().getWorks().add(work);
+            userRepository.save(user.get());
             return Optional.of(newWork);
         }
         throw new Exception("Work is null");
@@ -39,8 +39,14 @@ public class WorkToDoServiceImpl implements WorkToDoService {
     @Override
     public Optional<WorkToDo> makeWork(HttpServletRequest request, HttpServletResponse response, Long id) throws Exception {
         var user = userService.userLogin(request, response);
-        Optional<WorkToDo> foundWork = findWorkByid(user, id);
-        return foundWork;
+        try {
+            Optional<WorkToDo> foundWork = findWorkByid(user, id);
+            foundWork.get().setChecked(true);
+            workToDoRepository.save(foundWork.get());
+            return foundWork;
+        } catch (Exception e) {
+            throw new Exception("Not Work");
+        }
     }
 
 
