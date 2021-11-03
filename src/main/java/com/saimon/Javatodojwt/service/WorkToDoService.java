@@ -9,8 +9,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WorkToDoService {
-    Optional<WorkToDo> saveWork(Optional<AppUser> user, WorkToDo work) throws Exception;
-    Optional<WorkToDo> makeWork(HttpServletRequest request, HttpServletResponse response, Long id) throws Exception;
-    Optional<List<WorkToDo>> getWorks(HttpServletRequest request, HttpServletResponse response);
     Optional<WorkToDo> findWorkByid(Optional<AppUser> user, Long id) throws Exception;
 }

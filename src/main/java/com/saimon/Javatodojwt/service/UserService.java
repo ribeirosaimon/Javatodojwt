@@ -16,7 +16,9 @@ public interface UserService {
     Roles saveRoles(Roles role);
     void addRoleToUser(String username, String roleName);
     void addWorkToUser(String username, WorkToDo work);
+    Optional<WorkToDo> makeWork(String username, WorkToDo work) throws Exception;
     Optional<AppUser> userLogin(HttpServletRequest request, HttpServletResponse response);
+    List<WorkToDo> getAllWorks(String username);
     AppUser getUser(String usename);
     List<AppUser> getUsers();
 }

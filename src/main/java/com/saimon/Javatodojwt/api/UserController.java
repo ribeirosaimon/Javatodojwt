@@ -131,7 +131,7 @@ public class UserController {
         userService.addRoleToUser("admin", "ROLE_USER");
         userService.addRoleToUser("admin1", "ROLE_SUPER_ADMIN");
 
-        WorkToDo work = new WorkToDo(new Date(), "Fort",false,userService.getUser("admin"));
+        WorkToDo work = new WorkToDo(new Date(), "Fort", false, userService.getUser("admin"));
 
         userService.addWorkToUser("admin", work);
         return "ok";

@@ -1,8 +1,6 @@
 package com.saimon.Javatodojwt.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.saimon.Javatodojwt.domain.AppUser;
-import org.hibernate.jdbc.Work;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,6 +1,7 @@
 package com.saimon.Javatodojwt.api;
 
 import com.saimon.Javatodojwt.DTO.DTOConverter;
+import com.saimon.Javatodojwt.DTO.WorkDTO;
 import com.saimon.Javatodojwt.filter.CustomAuthenticationFilter;
 import com.saimon.Javatodojwt.model.WorkToDo;
 import com.saimon.Javatodojwt.repository.WorkToDoRepository;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -39,24 +41,33 @@ public class WorkToDoController {
                 .path("api/todo/works")
                 .toString());
         var user = userService.userLogin(request, response);
-        var listWork = user.get().getWorks();
-        for (WorkToDo w:listWork) {
-            log.info(w.getHomeWork());
-
-        }
+        var listWork = userService.getAllWorks(user.get().getUsername());
         var listWorkDto = dtoConverter.convertDTOList(listWork);
         return ResponseEntity.created(uri).body(listWorkDto.orElseThrow(() -> new Exception("User Error")));
     }
 
+    @PostMapping("/work/checked")
+    public ResponseEntity<WorkDTO> checkedWork(HttpServletRequest request, HttpServletResponse response, @RequestBody WorkToDo work) throws Exception {
+        URI uri = URI.create(ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("api/todo/work/checked")
+                .toString());
+        var user = userService.userLogin(request, response);
+        var newWork = userService.makeWork(user.get().getUsername(), work);
+        var workDTO = dtoConverter.converterDTO(newWork.get());
+        return ResponseEntity.created(uri).body(workDTO.orElseThrow(()-> new Exception("Error Work")));
+    }
+
     @PostMapping("/work/save")
-    public ResponseEntity<WorkToDo> saveWork(HttpServletRequest request, HttpServletResponse response, @RequestBody WorkToDo work) throws Exception{
+    public ResponseEntity<WorkDTO> saveWork(HttpServletRequest request, HttpServletResponse response, @RequestBody WorkToDo work) throws Exception {
         URI uri = URI.create(ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("api/todo/work/save")
                 .toString());
         var user = userService.userLogin(request, response);
-        var newWork = workService.saveWork(user, work);
-        var newWorkDTO = dtoConverter.converterDTO(newWork.get());
-        return ResponseEntity.created(uri).body(newWork.orElseThrow(() -> new Exception("Error save work")));
+        var newWork = new WorkToDo(new Date(), work.getHomeWork(), false, user.get());
+        userService.addWorkToUser(user.get().getUsername(), newWork);
+        var newWorkDTO = dtoConverter.converterDTO(newWork);
+        return ResponseEntity.created(uri).body(newWorkDTO.orElseThrow(() -> new Exception("Error save work")));
     }
 }
